@@ -1,0 +1,263 @@
+// =============== DATA ===============
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let reviews = JSON.parse(localStorage.getItem("reviews")) || {};
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let products = [
+  { id: 1, name: "Laptop", price: 25000, image: "images/laptop.jpg" },
+  { id: 2, name: "Shoe", price: 3500, image: "images/shoe.jpg" },
+  { id: 3, name: "Book", price: 500, image: "images/book.jpg" },
+  { id: 4, name: "Bag", price: 2000, image: "images/bag.jpg" },
+  { id: 5, name: "Watch", price: 5000, image: "images/watch.jpg" },
+  { id: 6, name: "Smart Watch", price: 9000, image: "images/watch.jpg" }
+];
+
+let currentUser = null;
+let cart = [];
+
+const mainContent = document.getElementById("mainContent");
+
+// =============== FUNCTIONS MUST BE GLOBAL ===============
+window.login = login;
+window.register = register;
+window.showLogin = showLogin;
+window.showRegister = showRegister;
+window.showShop = showShop;
+window.showDashboard = showDashboard;
+window.showOrders = showOrders;
+window.logout = logout;
+
+// =============== HEADER UI (SHOPEE STYLE) ===============
+function updateHeaderUI() {
+  const isLoggedIn = currentUser !== null;
+
+  const ids = [
+    "loginBtn",
+    "registerBtn",
+    "shopBtn",
+    "dashboardBtn",
+    "ordersBtn",
+    "logoutBtn"
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    if (id === "loginBtn" || id === "registerBtn") {
+      el.style.display = isLoggedIn ? "none" : "inline-block";
+    } else {
+      el.style.display = isLoggedIn ? "inline-block" : "none";
+    }
+  });
+}
+
+// =============== LOGIN / REGISTER ===============
+function showLogin() {
+  if (currentUser) return alert("Already logged in. Logout first.");
+
+  mainContent.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:calc(100vh - 70px);">
+      <div class="login-card">
+        <h2>Login</h2>
+        <input id="loginEmail" placeholder="Email">
+        <input id="loginPass" type="password" placeholder="Password">
+        <button type="button" onclick="login()">Login</button>
+      </div>
+    </div>
+  `;
+}
+
+function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+
+  if (!email || !pass) return alert("Fill all fields");
+
+  const user = users.find(u => u.email === email && u.password === pass);
+  if (!user) return alert("Invalid credentials");
+
+  currentUser = user;
+  updateHeaderUI();
+  showShop();
+}
+
+function showRegister() {
+  if (currentUser) return alert("Logout first to register");
+
+  mainContent.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:calc(100vh - 70px);">
+      <div class="login-card">
+        <h2>Register</h2>
+        <input id="regName" placeholder="Name">
+        <input id="regEmail" placeholder="Email">
+        <input id="regPass" type="password" placeholder="Password">
+        <button type="button" onclick="register()">Register</button>
+      </div>
+    </div>
+  `;
+}
+
+function register() {
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const pass = document.getElementById("regPass").value.trim();
+
+  if (!name || !email || !pass) return alert("Fill all fields");
+  if (users.find(u => u.email === email)) return alert("Email already exists");
+
+  users.push({ name, email, password: pass });
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Registered successfully");
+  showLogin();
+}
+
+// =============== LOGOUT ===============
+function logout() {
+  currentUser = null;
+  cart = [];
+  updateHeaderUI();
+  showLogin();
+}
+
+// =============== SHOP ===============
+function showShop() {
+  if (!currentUser) return alert("Login first");
+
+  mainContent.innerHTML = `
+    <h2>Shop</h2>
+    <input id="searchInput" placeholder="Search..." oninput="renderProducts()">
+    <div id="productList" style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;"></div>
+  `;
+  renderProducts();
+}
+
+function renderProducts() {
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const list = document.getElementById("productList");
+  list.innerHTML = "";
+
+  products
+    .filter(p => p.name.toLowerCase().includes(search))
+    .forEach(p => {
+      list.innerHTML += `
+        <div class="product-card">
+          <img src="${p.image}">
+          <h3>${p.name}</h3>
+          <p>₱${p.price}</p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>
+          <input id="reviewText-${p.id}" placeholder="Review">
+          <button onclick="addReview(${p.id})">Submit</button>
+          ${(reviews[p.id] || []).map(r => `<p>⭐ ${r.user}: ${r.text}</p>`).join("")}
+        </div>
+      `;
+    });
+}
+
+// =============== CART ===============
+function addToCart(id) {
+  cart.push(products.find(p => p.id === id));
+  alert("Added to cart");
+}
+
+function showDashboard() {
+  if (!currentUser) return alert("Login first");
+
+  let total = 0;
+  let html = `<div class="card" style="max-width:500px;margin:auto;"><h2>Your Cart</h2>`;
+
+  if (cart.length === 0) html += "<p>Cart is empty</p>";
+
+  cart.forEach((p, i) => {
+    total += p.price;
+    html += `
+      <div style="display:flex;gap:10px;align-items:center;">
+        <img src="${p.image}" style="width:80px;height:80px;object-fit:cover;">
+        <div style="flex:1">
+          <strong>${p.name}</strong>
+          <p>₱${p.price}</p>
+        </div>
+        <button onclick="removeFromCart(${i})">Remove</button>
+      </div>
+    `;
+  });
+
+  html += `<hr><h3>Total: ₱${total}</h3>
+           <button onclick="checkout()">Checkout</button></div>`;
+
+  mainContent.innerHTML = html;
+}
+
+function removeFromCart(i) {
+  cart.splice(i, 1);
+  showDashboard();
+}
+
+// =============== REVIEWS ===============
+function addReview(id) {
+  const text = document.getElementById(`reviewText-${id}`).value;
+  if (!text) return;
+
+  if (!reviews[id]) reviews[id] = [];
+  reviews[id].push({ user: currentUser.name, text });
+
+  localStorage.setItem("reviews", JSON.stringify(reviews));
+  renderProducts();
+}
+
+// =============== CHECKOUT ===============
+function checkout() {
+  if (cart.length === 0) return alert("Cart empty");
+
+  mainContent.innerHTML = `
+    <div class="card" style="max-width:500px;margin:auto;text-align:center;">
+      <h2>Processing your order...</h2>
+      <div class="loader"></div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    orders.push({ user: currentUser.email, status: "Preparing" });
+    localStorage.setItem("orders", JSON.stringify(orders));
+    cart = [];
+
+    mainContent.innerHTML = `
+      <div class="card" style="max-width:500px;margin:auto;text-align:center;">
+        <h2>✅ Order Placed!</h2>
+        <button onclick="showShop()">Continue Shopping</button>
+        <button onclick="showOrders()">View Orders</button>
+      </div>
+    `;
+  }, 1500);
+}
+
+// =============== ORDERS ===============
+function showOrders() {
+  if (!currentUser) return alert("Login first");
+
+  const myOrders = orders.filter(o => o.user === currentUser.email);
+  let html = `<div class="card" style="max-width:500px;margin:auto;"><h2>My Orders</h2>`;
+
+  if (myOrders.length === 0) html += "<p>No orders yet</p>";
+
+  myOrders.forEach((o, i) => {
+    html += `<p>Order #${i + 1} — <b>${o.status}</b></p>`;
+  });
+
+  html += `<button onclick="showShop()">Back</button></div>`;
+  mainContent.innerHTML = html;
+}
+
+// =============== INIT ===============
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("loginBtn")?.addEventListener("click", showLogin);
+  document.getElementById("registerBtn")?.addEventListener("click", showRegister);
+  document.getElementById("shopBtn")?.addEventListener("click", showShop);
+  document.getElementById("dashboardBtn")?.addEventListener("click", showDashboard);
+  document.getElementById("ordersBtn")?.addEventListener("click", showOrders);
+  document.getElementById("logoutBtn")?.addEventListener("click", logout);
+
+  updateHeaderUI();
+  showLogin();
+});
