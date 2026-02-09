@@ -14,7 +14,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [
   { id: 4, name: "Bag", price: 2000, image: "images/bag.jpg" },
   { id: 5, name: "Watch", price: 5000, image: "images/watch.jpg" },
   { id: 6, name: "Smart Watch", price: 9000, image: "images/smartwatch.jpg" },
-  { id: 7, name: "Monitor", price: 15000, image: "images/monitor.jpg" },
+  { id: 7, name: "Monitor", price: 15000, image: "images/Monitor.jpg" },
   { id: 8, name: "Phone", price: 10000, image: "images/phone.jpg" },
 ];
 
@@ -377,6 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateHeaderUI();
   showLogin();
 });
+
 
 
 
