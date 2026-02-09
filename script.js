@@ -27,7 +27,7 @@ window.showDashboard = showDashboard;
 window.showOrders = showOrders;
 window.logout = logout;
 
-// =============== HEADER UI (SHOPEE STYLE) ===============
+// =============== HEADER UI ===============
 function updateHeaderUI() {
   const isLoggedIn = currentUser !== null;
 
@@ -261,3 +261,4 @@ document.addEventListener("DOMContentLoaded", () => {
   updateHeaderUI();
   showLogin();
 });
+
