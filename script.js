@@ -7,7 +7,7 @@ let users = JSON.parse(localStorage.getItem("users")) || [];
 let reviews = JSON.parse(localStorage.getItem("reviews")) || {};
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-let products = [
+let products = JSON.parse(localStorage.getItem("products")) || [
   { id: 1, name: "Laptop", price: 25000, image: "images/laptop.jpg" },
   { id: 2, name: "Shoe", price: 3500, image: "images/shoe.jpg" },
   { id: 3, name: "Book", price: 500, image: "images/book.jpg" },
@@ -16,6 +16,7 @@ let products = [
   { id: 6, name: "Smart Watch", price: 9000, image: "images/smartwatch.jpg" },
   { id: 7, name: "Monitor", price: 15000, image: "images/monitor.jpg" },
 ];
+
 
 let currentUser = null;
 let cart = [];
@@ -319,6 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateHeaderUI();
   showLogin();
 });
+
 
 
 
