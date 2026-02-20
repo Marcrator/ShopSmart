@@ -62,6 +62,19 @@ window.showAdmin = showAdmin;
 
 
 // =============== HEADER UI (SHOPEE STYLE) ===============
+function showHome() {
+  mainContent.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:calc(100vh - 70px);">
+      <div class="login-card">
+        <h2>Welcome to ShopSmart</h2>
+        <p>Your online shopping solution.</p>
+        <button onclick="showLogin()">Login</button>
+        <button onclick="showRegister()">Register</button>
+      </div>
+    </div>
+  `;
+}
+
 function updateHeaderUI() {
   const isLoggedIn = currentUser !== null;
   const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
@@ -133,18 +146,6 @@ function showAdmin() {
 
 
 // =============== LOGIN / REGISTER ===============
-function showHome() {
-  mainContent.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:calc(100vh - 70px);">
-      <div class="login-card">
-        <h2>Welcome to ShopSmart</h2>
-        <p>Your online shopping solution.</p>
-        <button onclick="showLogin()">Login</button>
-        <button onclick="showRegister()">Register</button>
-      </div>
-    </div>
-  `;
-}
 
 function showLogin() {
   if (currentUser) return alert("Already logged in. Logout first.");
@@ -425,6 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
   showHome();
   showLogin();
 });
+
 
 
 
