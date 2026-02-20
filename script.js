@@ -31,16 +31,16 @@ let products = [
   { id: 20, name: "speaker", price: 300, image: "images/speaker.jpg" },
   { id: 21, name: "Cap", price: 200, image: "images/cap.jpg" },
   { id: 22, name: "Blet", price: 750, image: "images/belt.jpg" },
-  { id: 22, name: "Collar", price: 140, image: "images/collar.jpg" },
-  { id: 22, name: "Leash", price: 200, image: "images/leash.jpg" },
-  { id: 22, name: "Electric Kettle", price: 860, image: "images/kettle.jpg" },
-  { id: 22, name: "Blender", price: 1000, image: "images/blender.jpg" },
-  { id: 22, name: "Mixer", price: 870, image: "images/mixer.jpg" },
-  { id: 22, name: "SCHOOL BAG", price: 200, image: "images/bag.jpg" },
-  { id: 22, name: "Polo", price: 280, image: "images/polo.jpg" },
-  { id: 22, name: "Aquaflask", price: 1000, image: "images/tumbler.jpg" },
-  { id: 22, name: "Racket", price: 1200, image: "images/rackets.jpg" },
-  { id: 22, name: "Weight Scale", price: 300, image: "images/weight scale.jpg" },
+  { id: 23, name: "Collar", price: 140, image: "images/collar.jpg" },
+  { id: 24, name: "Leash", price: 200, image: "images/leash.jpg" },
+  { id: 25, name: "Electric Kettle", price: 860, image: "images/kettle.jpg" },
+  { id: 26, name: "Blender", price: 1000, image: "images/blender.jpg" },
+  { id: 27, name: "Mixer", price: 870, image: "images/mixer.jpg" },
+  { id: 28, name: "SCHOOL BAG", price: 200, image: "images/bag.jpg" },
+  { id: 29, name: "Polo", price: 280, image: "images/polo.jpg" },
+  { id: 30, name: "Aquaflask", price: 1000, image: "images/tumbler.jpg" },
+  { id: 31, name: "Racket", price: 1200, image: "images/rackets.jpg" },
+  { id: 32, name: "Weight Scale", price: 300, image: "images/weight scale.jpg" },
 ];
  localStorage.setItem("products", JSON.stringify(products));
 
@@ -432,6 +432,7 @@ if (currentUser) {
   showHome();
 }
 });
+
 
 
 
