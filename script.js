@@ -1,3 +1,4 @@
+
 // =============== ADMIN =================
 const ADMIN_EMAIL = "admin@gmail.com"; // <-- MUST BE HERE, at the top
 
@@ -52,6 +53,17 @@ window.showAdmin = showAdmin;
 
 
 // =============== HEADER UI (SHOPEE STYLE) ===============
+function showHome() {
+  mainContent.innerHTML = `
+    <div class="login-card">
+      <h2>Welcome to ShopSmart</h2>
+      <p>Your online shopping solution.</p>
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()">Register</button>
+    </div>
+  `;
+}
+
 function updateHeaderUI() {
   const isLoggedIn = currentUser !== null;
   const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
@@ -400,6 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateHeaderUI();
   showLogin();
+  showHome();
 });
 
 
